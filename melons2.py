@@ -9,14 +9,25 @@ class AbstractMelonOrder(object):
         self.species = species
         self.qty = qty
         self.shipped = False
+        self.flat_rate = 0
 
 
     def get_total(self):
         """Calculate price."""
 
-        base_price = 5
-        total = (1 + self.tax) * self.qty * base_price
+        if self.species == "Christmas":
+            base_price = (5 * 1.5)
+        else:
+            base_price = 5
+
+        if self.order_type == "international" and self.qty < 10:
+            self.flat_rate = 3
+        else:
+            self.flat_rate = 0
+        
+        total = (1 + self.tax) * self.qty * base_price + self.flat_rate
         return total
+
 
 
     def mark_shipped(self):
@@ -44,6 +55,8 @@ class InternationalMelonOrder(AbstractMelonOrder):
         self.country_code = country_code
         #country_code is the instance attribute
     
+
+
     order_type = "international"
     tax = 0.17
     #order_type and tax are the class attributes
