@@ -10,7 +10,7 @@ class AbstractMelonOrder(object):
         self.qty = qty
         self.shipped = False
         self.flat_rate = 0
-
+        self.passed_inspection = False
 
     def get_total(self):
         """Calculate price."""
@@ -20,15 +20,12 @@ class AbstractMelonOrder(object):
         else:
             base_price = 5
 
-        if self.order_type == "international" and self.qty < 10:
-            self.flat_rate = 3
-        else:
-            self.flat_rate = 0
+        total = (1 + self.tax) * self.qty * base_price
         
-        total = (1 + self.tax) * self.qty * base_price + self.flat_rate
+        if self.order_type == "international" and self.qty < 10:
+            total += 3
+        
         return total
-
-
 
     def mark_shipped(self):
         """Set shipped to true."""
@@ -65,3 +62,25 @@ class InternationalMelonOrder(AbstractMelonOrder):
         """Return the country code."""
         
         return self.country_code
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    
+    def __init__(self, species, qty, passed_inspection):
+
+        super(GovernmentMelonOrder, self).__init__(species, qty)
+        
+        self.passed_inspection = passed_inspection
+
+    order_type = "government"
+    tax = 0
+
+
+    def mark_inspections(self, passed):
+
+        self.passed_inspection = True
+
+
+
+
+
+
