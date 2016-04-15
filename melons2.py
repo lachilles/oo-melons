@@ -30,15 +30,23 @@ class DomesticMelonOrder(AbstractMelonOrder):
 
     order_type = "domestic"
     tax = 0.08
-
+    #order_type and tax are the class attributes
 
 class InternationalMelonOrder(AbstractMelonOrder):
+    #InternationalMelonOrder subclasses AbstractMelonOrder
     """An international (non-US) melon order."""
-    def __init__(self, country_code):
+    
+
+    def __init__(self, species, qty, country_code):
+        #Defined the initialization method with attributes species, qty, country_code
+        super(InternationalMelonOrder, self).__init__(species, qty)
+        #Calling the initialization method of the super
         self.country_code = country_code
+        #country_code is the instance attribute
     
     order_type = "international"
     tax = 0.17
+    #order_type and tax are the class attributes
 
     def get_country_code(self):
         """Return the country code."""
